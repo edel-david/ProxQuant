@@ -41,8 +41,9 @@ class ResultsLog(object):
         if self.results is None:
             self.results = df
         else:
-            self.results = self.results.append(df, ignore_index=True)
-
+            # self.results = self.results.append(df, ignore_index=True)
+            self.results = pd.concat([self.results,df],ignore_index=True)
+            
     def save(self, title='Training Results'):
         if len(self.figures) > 0:
             if os.path.isfile(self.plot_path):
@@ -149,7 +150,7 @@ def accuracy(output, target, topk=(1,)):
 
     res = []
     for k in topk:
-        correct_k = correct[:k].view(-1).float().sum(0)
+        correct_k = correct[:k].reshape(-1).float().sum(0)
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 
